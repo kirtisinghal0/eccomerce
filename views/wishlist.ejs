@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Wishlist</title>
+    <link rel="stylesheet" href="/css/wishlist.css" /> <!-- Updated path -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <h1>Your Wishlist</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/cart">Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="wishlist">
+        <h2>Items in Your Wishlist</h2>
+        <div class="wishlist-container">
+            <% if (wishlist && wishlist.length > 0) { %>
+                <% wishlist.forEach(item => { %>
+                    <div class="product-card">
+                        <!-- Ensure `item.productId.images` exists and is populated -->
+                        <img src="/images/<%= item.productId.images?.[0] || 'default-placeholder.png' %>" alt="<%= item.productId.name %>" />
+                        <div class="product-details">
+                            <!-- Use `item.productId.name` and `item.productId.price` -->
+                            <h3><%= item.productId.name %></h3>
+                            <p class="price">₹<%= item.productId.price.toFixed(2) %></p>
+                        </div>
+                        <div class="product-actions">
+                            <!-- Use `item._id` for the wishlist item ID -->
+                            <button class="move-to-cart" data-id="<%= item._id %>">Move to Cart</button>
+                            <button class="remove-item" data-id="<%= item._id %>">&times;</button>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p>Your wishlist is empty.</p>
+            <% } %>
+        </div>
+
+        <!-- Buttons for further procedure -->
+        <div class="wishlist-buttons">
+          <button>  <a href="/" class="btn continue-shopping">Continue Shopping</a></button>
+        </div>
+    </section>
+
+    <script src="/js/wishlist.js"></script> <!-- Updated path -->
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        #chatbox { width: 50%; margin: 20px auto; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        #user-input { width: 80%; padding: 10px; }
+        button { padding: 10px; }
+        .message { text-align: left; padding: 5px; }
+        .bot { color: blue; }
+        .user { color: green; }
+    </style>
+</head>
+<body>
+    <h2>Chatbot Test</h2>
+    <div id="chatbox"></div>
+    <input type="text" id="user-input" placeholder="Ask a question...">
+    <button onclick="askQuestion()">Send</button>
+
+    <script>
+        async function askQuestion() {
+            const userInput = document.getElementById("user-input").value;
+            if (!userInput.trim()) return;
+            
+            const chatbox = document.getElementById("chatbox");
+            chatbox.innerHTML += `<div class='message user'><b>You:</b> ${userInput}</div>`;
+            document.getElementById("user-input").value = "";
+
+            try {
+                const response = await fetch("http://127.0.0.1:8000/ask-question", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ question: userInput })
+                });
+                
+                const data = await response.json();
+                chatbox.innerHTML += `<div class='message bot'><b>Bot:</b> ${data.answer}</div>`;
+            } catch (error) {
+                chatbox.innerHTML += `<div class='message bot'><b>Bot:</b> Error getting response.</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
